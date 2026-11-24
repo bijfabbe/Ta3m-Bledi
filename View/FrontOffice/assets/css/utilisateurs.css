@@ -1,0 +1,132 @@
+/* ===== Module Utilisateurs (style Ta3m Bledi) ===== */
+.ub-page {
+  background: #f4f6f3;
+  padding: 30px 0 70px;
+}
+
+/* Bande arrondie en dégradé */
+.ub-hero {
+  background: linear-gradient(110deg, #2f5d45 0%, #7fae84 100%);
+  border-radius: 18px;
+  padding: 30px 28px;
+  color: #fff;
+  margin-bottom: 28px;
+}
+.ub-hero-label {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+.ub-hero h1 {
+  color: #fff;
+  font-size: 2.2rem;
+  margin: 4px 0 0;
+}
+
+/* Carte blanche du formulaire */
+.ub-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.ub-card .form-control {
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.ub-card .form-control:focus {
+  border-color: #4f8a63;
+  box-shadow: 0 0 0 0.2rem rgba(79, 138, 99, 0.15);
+}
+.ub-card a {
+  color: #2f6b4a;
+  font-weight: 500;
+}
+
+/* Bouton */
+.ub-btn {
+  background: #2f5d45;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  width: 100%;
+}
+.ub-btn:hover {
+  background: #244a37;
+  color: #fff;
+}
+/* Carte large (page profil) */
+.ub-card.ub-card-large {
+  max-width: 950px;
+}
+.ub-profil-photo {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.ub-card h4 {
+  color: #2f5d45;
+  margin-bottom: 18px;
+}
+/* ===== Ajouts CRUD ===== */
+
+/* Messages d'erreur sous les champs */
+.ub-erreur {
+  color: #c0392b;
+  font-size: 0.88rem;
+  margin-top: 5px;
+  min-height: 1em;
+}
+
+/* Avatar avec initiales (quand pas de photo) */
+.ub-avatar {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  margin: 0 auto;
+  background: linear-gradient(110deg, #2f5d45 0%, #7fae84 100%);
+  color: #fff;
+  font-size: 3.5rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cartes badges (page Mes badges) */
+.ub-badge {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  padding: 28px 20px;
+  text-align: center;
+  height: 100%;
+}
+.ub-badge h5 {
+  color: #2f5d45;
+}
+.ub-badge-verrouille {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.ub-badge-icone {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+.ub-badge-defaut {
+  font-size: 3rem;
+  color: #2f5d45;
+}
+.ub-points {
+  display: inline-block;
+  background: #e7f1ea;
+  color: #2f5d45;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-radius: 20px;
+  padding: 3px 12px;
+}

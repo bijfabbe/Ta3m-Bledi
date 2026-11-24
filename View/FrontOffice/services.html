@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Variétés - Taam Bledi</title>
+  <meta name="description" content="Consultez les variétés agricoles tunisiennes, adoptez une graine et discutez avec Jedda IA.">
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <!-- Thème Ta3m + composants du module Musée -->
+  <link href="assets/css/taam.css" rel="stylesheet">
+  <link href="assets/css/musee.css" rel="stylesheet">
+</head>
+<body data-jedda="on">
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand brand" href="index.html">Taam Bledi</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">À propos</a></li>
+            <li class="nav-item"><a class="nav-link active" href="services.html">Variétés</a></li>
+            <li class="nav-item"><a class="nav-link" href="testimonials.html">Témoignages</a></li>
+            <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item" id="authNav"><a class="nav-link" href="connexion.html">Connexion</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container pb-4">
+    <section class="page-banner">
+      <div>
+        <div class="eyebrow">Musée des variétés</div>
+        <h1>Produits</h1>
+        <p>Consultez les variétés agricoles tunisiennes, adoptez une graine et discutez avec Jedda IA.</p>
+      </div>
+      <a href="#varieties" class="btn-dark-green">Choisir un produit</a>
+    </section>
+
+    <section id="varieties" class="panel mb-4">
+      <div class="panel-head">
+        <h2>Catalogue des produits</h2>
+        <span class="muted">Adopter une graine est réservé aux utilisateurs connectés.</span>
+      </div>
+
+      <div class="toolbar">
+        <div class="year-pills mb-0" id="varietyFilters" aria-label="Filtrer par catégorie"></div>
+
+        <div class="search-box">
+          <i class="bi bi-search"></i>
+          <input type="search" id="varietySearch" placeholder="Rechercher une variété…" aria-label="Rechercher une variété">
+        </div>
+
+        <!-- Visible uniquement pour un agriculteur (géré par musee.js) -->
+        <div id="farmerBar" hidden>
+          <button type="button" id="addVarietyBtn" class="btn-dark-green">
+            <i class="bi bi-plus-circle"></i> Ajouter
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-4" id="varietyGrid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head"><h2>Comment adopter une graine ?</h2></div>
+      <div class="row g-3">
+        <div class="col-md-4"><div class="stat-tile"><i class="bi bi-search-heart"></i><div><small>Étape 1</small><strong>Choisissez</strong><em>Parcourez les variétés.</em></div></div></div>
+        <div class="col-md-4"><div class="stat-tile"><i class="bi bi-person-check"></i><div><small>Étape 2</small><strong>Connectez-vous</strong><em>Créez un compte gratuit.</em></div></div></div>
+        <div class="col-md-4"><div class="stat-tile"><i class="bi bi-heart"></i><div><small>Étape 3</small><strong>Adoptez</strong><em>Parrainez la graine.</em></div></div></div>
+      </div>
+    </section>
+
+    <!-- Modal : confirmation d'adoption -->
+    <div class="modal fade" id="adoptModal" tabindex="-1" aria-labelledby="adoptTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:22px">
+          <div class="modal-header">
+            <h5 class="modal-title" id="adoptTitle">Adopter une graine</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body">Vous allez adopter une graine de <strong id="adoptName"></strong>. Confirmer ?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn-adopt" id="adoptConfirm">Confirmer l’adoption</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal : ajout d'une variété (agriculteur) -->
+    <div class="modal fade" id="varietyModal" tabindex="-1" aria-labelledby="varietyTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:22px">
+          <form id="varietyForm" novalidate>
+            <div class="modal-header">
+              <h5 class="modal-title" id="varietyTitle">Ajouter une variété</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            <div class="modal-body">
+              <div class="alert alert-danger" id="varietyError" role="alert" hidden></div>
+
+              <label class="form-label" for="vName">Nom *</label>
+              <input class="form-control mb-2" id="vName" name="vName" type="text" placeholder="Ex : Grenadier">
+
+              <label class="form-label" for="vCat">Catégorie</label>
+              <select class="form-select mb-2" id="vCat" name="vCat">
+                <option>Céréales</option>
+                <option>Oliviers</option>
+                <option>Fruits</option>
+                <option>Légumes</option>
+                <option>Plantes</option>
+              </select>
+
+              <label class="form-label" for="vRegion">Régions *</label>
+              <input class="form-control mb-2" id="vRegion" name="vRegion" type="text" placeholder="Ex : Sfax, Gafsa">
+
+              <label class="form-label" for="vDesc">Description *</label>
+              <textarea class="form-control mb-2" id="vDesc" name="vDesc" rows="3" placeholder="Décrivez la variété…"></textarea>
+
+              <label class="form-label" for="vImgName">Nom du fichier image <small class="text-muted">(dossier assets/img/produit)</small></label>
+              <input class="form-control mb-2" id="vImgName" name="vImgName" type="text" placeholder="Ex : tomate.jpg">
+
+              <label class="form-label" for="vImgFile">…ou importer une image</label>
+              <input class="form-control" id="vImgFile" name="vImgFile" type="file" accept="image/*">
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn-dark-green">Enregistrer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 Taam Bledi · Préservation des variétés agricoles tunisiennes</div>
+  </footer>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/musee.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Connexion - Taam Bledi</title>
+  <meta name="description" content="Connectez-vous ou créez un compte pour adopter une graine et ajouter un témoignage.">
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Marcellus&display=swap" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <!-- Thème Taam + composants du module Musée -->
+  <link href="assets/css/taam.css" rel="stylesheet">
+  <link href="assets/css/musee.css" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand brand" href="index.html">Taam Bledi</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+          <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.html">À propos</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Variétés</a></li>
+          <li class="nav-item"><a class="nav-link" href="testimonials.html">Témoignages</a></li>
+          <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          <li class="nav-item" id="authNav"><a class="nav-link active" href="connexion.html">Connexion</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container pb-4">
+    <section class="page-banner">
+      <div>
+        <div class="eyebrow">Espace utilisateur</div>
+        <h1>Connexion</h1>
+        <p>Connectez-vous pour adopter une graine et ajouter un témoignage.</p>
+      </div>
+    </section>
+
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="auth-card">
+          <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+            <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabLogin" type="button" role="tab">Se connecter</button></li>
+            <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabRegister" type="button" role="tab">Créer un compte</button></li>
+          </ul>
+          <div id="authMsg" class="alert" role="alert" hidden></div>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="tabLogin" role="tabpanel">
+              <form id="loginForm">
+                <div class="mb-3"><label for="lEmail" class="form-label">Adresse e-mail</label><input type="email" id="lEmail" class="form-control" autocomplete="email" required></div>
+                <div class="mb-3"><label for="lPass" class="form-label">Mot de passe</label><input type="password" id="lPass" class="form-control" autocomplete="current-password" required></div>
+                <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="tabRegister" role="tabpanel">
+              <form id="registerForm">
+                <div class="mb-3"><label for="rName" class="form-label">Nom complet</label><input type="text" id="rName" class="form-control" autocomplete="name" minlength="2" required></div>
+                <div class="mb-3"><label for="rEmail" class="form-label">Adresse e-mail</label><input type="email" id="rEmail" class="form-control" autocomplete="email" required></div>
+               <div class="role-switch">
+                <label for="roleSelect">Je suis <b>*</b></label>
+                <select id="roleSelect" name="role" class="role-select" required>
+                  <option value="" disabled selected>-- Choisir --</option>
+                  <option value="user">Simple utilisateur</option>
+                  <option value="farmer">Agriculteur</option>
+                </select>
+              </div>
+                <div class="mb-3"><label for="rPass" class="form-label">Mot de passe</label><input type="password" id="rPass" class="form-control" autocomplete="new-password" minlength="6" required></div>
+                <div class="mb-3"><label for="rPass2" class="form-label">Confirmer le mot de passe</label><input type="password" id="rPass2" class="form-control" autocomplete="new-password" minlength="6" required></div>
+                <button type="submit" class="btn btn-primary w-100">Créer mon compte</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2026 Taam Bledi · Préservation des variétés agricoles tunisiennes</div>
+  </footer>
+
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/musee.js"></script>
+
+</body>
+</html>

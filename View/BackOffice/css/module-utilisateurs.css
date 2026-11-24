@@ -1,0 +1,12 @@
+/* ===== Module Utilisateurs et Badges (Back Office) ===== */
+.ub-erreur {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  min-height: 1em;
+}
+.ub-icone-table {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}

@@ -1,0 +1,483 @@
+/* =========================================================
+   Ta3m Bledi – Module Musée (variétés, témoignages, auth, Jedda IA)
+   ========================================================= */
+
+/* ---------- Barre d'outils : filtres + recherche ---------- */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.year-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+.year-pills button,
+.year-pills .pill {
+  padding: 10px 22px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--green-700);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.year-pills button:hover,
+.year-pills .pill:hover { border-color: var(--green-400); background: var(--green-50); }
+.year-pills button.active,
+.year-pills .pill.active {
+  background: var(--green-600);
+  border-color: var(--green-600);
+  color: #fff;
+}
+
+.search-box { position: relative; width: 320px; max-width: 100%; flex: 0 1 320px; }
+.search-box i {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+.search-box input {
+  width: 100%;
+  height: 52px;
+  padding: 0 20px 0 48px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text);
+  font-size: .95rem;
+}
+.search-box input:focus {
+  outline: 0;
+  border-color: var(--green-400);
+  box-shadow: 0 0 0 4px rgba(123, 166, 124, .2);
+}
+
+/* ---------- Cartes variétés (style v3 : fines et élégantes) ---------- */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) {
+  --c1: #4f8a63;
+  --c2: #2f6b45;
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e8e8e8 !important;
+  border-radius: 18px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .07);
+  transition: transform .2s, box-shadow .2s;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *):hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0, 0, 0, .12); }
+
+/* Couleurs par catégorie */
+:is(.variety-card, .card-variety, #varietyGrid > * > *)[data-cat="Fruits"],   :is(.variety-card, .card-variety, #varietyGrid > * > *).cat-fruits,   :is(.variety-card, .card-variety, #varietyGrid > * > *):has(.cat-fruits)   { --c1: #d97f3a; --c2: #a34c14; }
+:is(.variety-card, .card-variety, #varietyGrid > * > *)[data-cat="Céréales"], :is(.variety-card, .card-variety, #varietyGrid > * > *).cat-cereales, :is(.variety-card, .card-variety, #varietyGrid > * > *):has(.cat-cereales){ --c1: #d9a93e; --c2: #a8741a; }
+:is(.variety-card, .card-variety, #varietyGrid > * > *)[data-cat="Oliviers"], :is(.variety-card, .card-variety, #varietyGrid > * > *).cat-oliviers, :is(.variety-card, .card-variety, #varietyGrid > * > *):has(.cat-oliviers){ --c1: #86973a; --c2: #4f6020; }
+.variety-card[data-cat="Légumes"] { --c1: #6aa84f; --c2: #2f6b2f; }
+.variety-card[data-cat="Plantes"] { --c1: #9a6a45; --c2: #5a3622; }
+
+/* Bandeau visuel : photo réelle (ou dégradé + icône si pas de photo) */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :first-child {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 170px;
+  padding: 0 !important;
+  overflow: hidden;
+  background-image: linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);
+  color: #fff;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :first-child > :is(i, svg, .bi) {
+  position: static !important;
+  margin: 0 !important;
+  width: auto;
+  height: auto;
+  font-size: 2.8rem !important;
+  line-height: 1;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :first-child > svg { width: 2.8rem; height: 2.8rem; }
+
+/* Photo : remplit tout le bandeau, l'icône disparaît quand la photo est là */
+.variety-media > img,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :first-child > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform .4s;
+}
+.variety-card:hover .variety-media > img { transform: scale(1.05); }
+.variety-media:has(> img) > i { display: none !important; }
+
+/* Badge catégorie (toujours au-dessus de la photo) */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :first-child > :is(.badge, .badge-cat, .variety-badge, span:not(:has(.bi))),
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :is(.badge, .badge-cat, .variety-badge) {
+  position: absolute !important;
+  top: 0 !important;
+  right: 16px !important;
+  left: auto !important;
+  z-index: 2;
+  margin: 0 !important;
+  padding: 4px 13px !important;
+  border-radius: 0 0 10px 10px !important;
+  background: #fff !important;
+  color: #1f2a24 !important;
+  font-family: var(--font-body);
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  line-height: 1.4;
+}
+
+/* Corps */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :last-child:not(:first-child) {
+  flex: 1;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 24px 24px !important;
+  background: #fff;
+}
+
+/* Titre */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(h2, h3, h4, h5, h6, .card-title, .variety-title, .variety-name) {
+  font-family: var(--font-title) !important;
+  font-size: 1.5rem !important;
+  font-weight: 400 !important;
+  line-height: 1.2;
+  color: #2c4054 !important;
+  margin: 0 0 6px !important;
+}
+
+/* Lieu */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(.variety-region, .variety-location, small, .text-muted):not(button *),
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :has(> .bi-geo-alt, > .bi-geo) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  color: #808080 !important;
+  font-size: .92rem !important;
+}
+
+/* Description */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) p {
+  margin: 0 0 18px !important;
+  color: #2a2a2a;
+  font-size: .98rem !important;
+  line-height: 1.5;
+}
+
+/* Boutons : fins, en pilule, largeur automatique */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, a.btn, .btn) {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 8px;
+  width: auto !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 9px 18px !important;
+  border-radius: 999px !important;
+  font-family: var(--font-body);
+  font-size: .9rem !important;
+  font-weight: 500 !important;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(.variety-actions, div:has(> button), div:has(> .btn)) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) > :last-child > :is(button, .btn) { margin-bottom: 8px !important; }
+
+/* Adopter une graine : vert plein */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-adopt,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn):has(.bi-heart, .bi-heart-fill) {
+  background: #11662f !important;
+  border: 1px solid #11662f !important;
+  color: #fff !important;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-adopt:hover,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn):has(.bi-heart):hover { background: #0c4d22 !important; }
+
+/* Graine adoptée : contour vert */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-adopted,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn):has(.bi-check-circle, .bi-check2-circle, .bi-check-lg) {
+  background: #fff !important;
+  border: 1px solid #11662f !important;
+  color: #11662f !important;
+  cursor: default;
+}
+
+/* Demander à Jedda : contour gris */
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-jedda,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-ask-jedda,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn):has(.bi-chat-dots, .bi-chat, .bi-chat-heart, .bi-chat-left-dots) {
+  background: #fff !important;
+  border: 1px solid #e2e2e2 !important;
+  color: #1d1d1d !important;
+}
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn).btn-jedda:hover,
+:is(.variety-card, .card-variety, #varietyGrid > * > *) :is(button, .btn):has(.bi-chat-dots):hover { background: #f5f5f5 !important; }
+
+.btn-outline-green {
+  padding: 9px 18px;
+  border: 1px solid #11662f;
+  border-radius: 999px;
+  background: #fff;
+  color: #11662f;
+  font-weight: 500;
+}
+
+/* Bouton de confirmation dans la fenêtre d'adoption */
+.btn-adopt#adoptConfirm {
+  padding: 9px 20px;
+  border: 1px solid #11662f;
+  border-radius: 999px;
+  background: #11662f;
+  color: #fff;
+  font-weight: 500;
+}
+.btn-adopt#adoptConfirm:hover { background: #0c4d22; }
+
+/* ---------- Tuiles "étapes" ---------- */
+.stat-tile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: var(--green-50);
+}
+.stat-tile > i {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--green-100);
+  color: var(--green-600);
+  font-size: 1.5rem;
+}
+.stat-tile small { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: .7rem; }
+.stat-tile strong { display: block; font-family: var(--font-title); font-weight: 400; font-size: 1.2rem; color: var(--green-900); }
+.stat-tile em { font-style: normal; color: var(--muted); font-size: .9rem; }
+
+/* ---------- Témoignages ---------- */
+.testi-card {
+  height: 100%;
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--green-50);
+}
+.testi-card audio { width: 100%; margin-top: 12px; }
+
+.login-prompt {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 22px;
+  background: var(--green-50);
+}
+.login-prompt > i { font-size: 2.2rem; color: var(--green-600); }
+.login-prompt[hidden], #testiFormWrap[hidden], .alert[hidden] { display: none !important; }
+
+/* ---------- Authentification ---------- */
+.auth-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+}
+.auth-card .nav-pills { background: var(--green-50); border-radius: 999px; padding: 5px; }
+.auth-card .nav-pills .nav-link {
+  border-radius: 999px;
+  color: var(--green-700);
+  font-weight: 600;
+}
+.auth-card .nav-pills .nav-link.active { background: var(--green-600); color: #fff; }
+
+/* ---------- Bouton flottant Jedda IA (style v3) ---------- */
+.jedda-fab, .jedda-toggle, #jeddaToggle, #jeddaFab, .jedda-btn, [data-jedda-toggle] {
+  position: fixed !important;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1040;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  width: auto !important;
+  padding: 14px 26px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #11662f !important;
+  color: #fff !important;
+  font-family: var(--font-title) !important;
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  line-height: 1;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .28);
+  cursor: pointer;
+  transition: transform .15s, background .2s;
+}
+.jedda-fab:hover, .jedda-toggle:hover, #jeddaToggle:hover, #jeddaFab:hover,
+.jedda-btn:hover, [data-jedda-toggle]:hover { background: #0c4d22 !important; transform: translateY(-2px); }
+.jedda-fab i, .jedda-toggle i, #jeddaToggle i, #jeddaFab i, .jedda-btn i { font-size: 1.3rem; }
+
+/* ---------- Fenêtre de chat : MASQUÉE par défaut, visible après clic ---------- */
+.jedda-panel, #jeddaPanel, #jeddaChat, .jedda-chat, .jedda-window, .jedda-box, #jeddaWindow {
+  position: fixed;
+  right: 24px;
+  bottom: 92px;
+  z-index: 1040;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  height: auto;
+  max-height: 70vh;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .25);
+  display: none !important;
+}
+/* États "ouvert" (le JS ajoute la classe .open) */
+.jedda-panel:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+#jeddaPanel:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+#jeddaChat:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+.jedda-chat:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+.jedda-window:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+.jedda-box:is(.open, .show, .is-open, .active, .visible, [data-open="true"]),
+#jeddaWindow:is(.open, .show, .is-open, .active, .visible, [data-open="true"]) {
+  display: flex !important;
+}
+
+.jedda-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #11662f;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.jedda-messages { flex: 1; overflow-y: auto; min-height: 180px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.jedda-msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; background: #e6ede8; color: #3b4a42; font-size: .92rem; }
+.jedda-msg.user { align-self: flex-end; background: #11662f; color: #fff; }
+.jedda-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border); }
+.jedda-input input { flex: 1; border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; }
+.jedda-input button { width: 40px; height: 40px; border: 0; border-radius: 50%; background: #4a7f5e; color: #fff; }
+
+/* ---------- Choix du rôle + actions agriculteur ---------- */
+.role-switch {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  background: var(--green-50);
+}
+.role-switch > span { font-weight: 600; color: var(--green-900); margin-right: 4px; }
+.role-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--green-700);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .92rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.role-btn:hover { border-color: var(--green-400); }
+.role-btn.active { background: var(--green-600); border-color: var(--green-600); color: #fff; }
+
+.role-switch label { font-weight: 600; color: var(--green-900); margin: 0 4px 0 0; }
+.role-switch label b { color: #c0392b; }
+.role-switch select {
+  min-width: 240px;
+  max-width: 100%;
+  height: 46px;
+  padding: 0 40px 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: #fff;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+}
+.role-switch select:focus {
+  outline: 0;
+  border-color: var(--green-400);
+  box-shadow: 0 0 0 4px rgba(123, 166, 124, .2);
+}
+
+.farmer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px dashed var(--green-400);
+  border-radius: 18px;
+}
+.farmer-bar[hidden] { display: none !important; }
+.farmer-bar .btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: #11662f;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+.farmer-bar .btn-add:hover { background: #0c4d22; }
+
+/* Supprimer : contour rouge */
+:is(.variety-card, #varietyGrid > * > *) :is(button, .btn).btn-delete {
+  background: #fff !important;
+  border: 1px solid #c0392b !important;
+  color: #c0392b !important;
+}
+:is(.variety-card, #varietyGrid > * > *) :is(button, .btn).btn-delete:hover { background: #fdecea !important; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 767.98px) {
+  .panel { padding: 22px; }
+  .search-box { width: 100%; }
+  .variety-media { height: 150px; }
+  .jedda-fab, .jedda-toggle, #jeddaToggle { right: 14px; bottom: 14px; padding: 12px 18px !important; }
+  .jedda-panel, #jeddaPanel { right: 14px; bottom: 76px; }
+}
